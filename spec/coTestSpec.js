@@ -3,7 +3,10 @@ const expect = require('chai').expect;
 const coTest = require('../src/coTest');
 const CarInsurance = coTest.CarInsurance;
 const Product = coTest.Product;
-
+const SuperSale = coTest.SuperSale;
+const FullCoverage = coTest.FullCoverage;
+const MegaCoverage = coTest.MegaCoverage;
+const SpecialFullCoverage = coTest.SpecialFullCoverage;
 
 describe("Test de creación de carro", function() {
 
@@ -70,7 +73,7 @@ describe("Test de Producto normales", function() {
 describe("Test de Producto 'Super Sale'", function() {
 
   it("Si la fecha de venta no ha expirado, cada día disminuye en uno los días de venta y en dos el precio.", function() {
-    const coTest = new CarInsurance([ new Product("Super Sale", 10, 20) ]);
+    const coTest = new CarInsurance([ new SuperSale(10, 20) ]);
     const products = coTest.updatePrice();
     expect(products[0].name).equal("Super Sale");
     expect(products[0].sellIn).equal(9);
@@ -78,7 +81,7 @@ describe("Test de Producto 'Super Sale'", function() {
   });
 
   it("Si la fecha de venta expiró, cada día disminuye en uno los días de venta y el precio disminuye en cuatro.", function() {
-    const coTest = new CarInsurance([ new Product("Super Sale", 0, 20) ]);
+    const coTest = new CarInsurance([ new SuperSale( 0, 20) ]);
     const products = coTest.updatePrice();
     expect(products[0].name).equal("Super Sale");
     expect(products[0].sellIn).equal(-1);
@@ -86,7 +89,7 @@ describe("Test de Producto 'Super Sale'", function() {
   });
 
   it("El precio de venta no puede ser negativo", function() {
-    const coTest = new CarInsurance([ new Product("Super Sale", 0, 0) ]);
+    const coTest = new CarInsurance([ new SuperSale(0, 0) ]);
     const products = coTest.updatePrice();
     expect(products[0].name).equal("Super Sale");
     expect(products[0].sellIn).equal(-1);
@@ -98,7 +101,7 @@ describe("Test de Producto 'Super Sale'", function() {
 describe("Test de Producto 'Full Coverage'", function() {
 
   it("Si la fecha de venta no ha expirado, cada día disminuye en uno los días de venta pero aumenta en uno el precio.", function() {
-    const coTest = new CarInsurance([ new Product("Full Coverage", 10, 20) ]);
+    const coTest = new CarInsurance([ new FullCoverage( 10, 20) ]);
     const products = coTest.updatePrice();
     expect(products[0].name).equal("Full Coverage");
     expect(products[0].sellIn).equal(9);
@@ -106,7 +109,7 @@ describe("Test de Producto 'Full Coverage'", function() {
   });
 
   it("Si la fecha de venta expiró, cada día disminuye en uno los días de venta pero aumenta en dos el precio.", function() {
-    const coTest = new CarInsurance([ new Product("Full Coverage", 0, 20) ]);
+    const coTest = new CarInsurance([ new FullCoverage( 0, 20) ]);
     const products = coTest.updatePrice();
     expect(products[0].name).equal("Full Coverage");
     expect(products[0].sellIn).equal(-1);
@@ -114,7 +117,7 @@ describe("Test de Producto 'Full Coverage'", function() {
   });
 
   it("El precio de venta no puede ser mayor a 50", function() {
-    const coTest = new CarInsurance([ new Product("Full Coverage", 0, 50) ]);
+    const coTest = new CarInsurance([ new FullCoverage(0, 50) ]);
     const products = coTest.updatePrice();
     expect(products[0].name).equal("Full Coverage");
     expect(products[0].sellIn).equal(-1);
@@ -126,7 +129,7 @@ describe("Test de Producto 'Full Coverage'", function() {
 describe("Test de Producto 'Mega Coverage'", function() {
 
   it("Si la fecha de venta no ha expirado, no debe expirar o disminuir su precio.", function() {
-    const coTest = new CarInsurance([ new Product("Mega Coverage", 0, 80) ]);
+    const coTest = new CarInsurance([ new MegaCoverage( 0, 80) ]);
     const products = coTest.updatePrice();
     expect(products[0].name).equal("Mega Coverage");
     expect(products[0].sellIn).equal(0);
@@ -134,7 +137,7 @@ describe("Test de Producto 'Mega Coverage'", function() {
   });
 
   it("Si la fecha de venta expiró, no debe expirar o disminuir su precio.", function() {
-    const coTest = new CarInsurance([ new Product("Mega Coverage", -1, 80) ]);
+    const coTest = new CarInsurance([ new MegaCoverage(-1, 80) ]);
     const products = coTest.updatePrice();
     expect(products[0].name).equal("Mega Coverage");
     expect(products[0].sellIn).equal(-1);
@@ -146,7 +149,7 @@ describe("Test de Producto 'Mega Coverage'", function() {
 describe("Test de Producto 'Special Full Coverage'", function() {
 
   it("Si la fecha de venta no ha expirado y quedan más de diez días, cada día disminuye en uno los días de venta pero aumenta en uno el precio.", function() {
-    const coTest = new CarInsurance([ new Product("Special Full Coverage", 11, 20) ]);
+    const coTest = new CarInsurance([ new SpecialFullCoverage(11, 20) ]);
     const products = coTest.updatePrice();
     expect(products[0].name).equal("Special Full Coverage");
     expect(products[0].sellIn).equal(10);
@@ -156,7 +159,7 @@ describe("Test de Producto 'Special Full Coverage'", function() {
   it("Si la fecha de venta no ha expirado y quedan entre seis y diez días, cada día disminuye en uno los días de venta pero aumenta en dos el precio.", function() {
     [10,9,8,7,6].forEach( (dias) => {
       precio = dias + 5;
-      const coTest = new CarInsurance([ new Product("Special Full Coverage", dias, precio) ]);
+      const coTest = new CarInsurance([ new SpecialFullCoverage( dias, precio) ]);
       const products = coTest.updatePrice();
       expect(products[0].name).equal("Special Full Coverage");
       expect(products[0].sellIn).equal(dias - 1);
@@ -167,7 +170,7 @@ describe("Test de Producto 'Special Full Coverage'", function() {
   it("Si la fecha de venta no ha expirado y quedan entre uno y cinco días, cada día disminuye en uno los días de venta pero aumenta en tres el precio.", function() {
     [5,4,3,2,1].forEach( (dias) => {
       precio = dias + 5;
-      const coTest = new CarInsurance([ new Product("Special Full Coverage", dias, precio) ]);
+      const coTest = new CarInsurance([ new SpecialFullCoverage( dias, precio) ]);
       const products = coTest.updatePrice();
       expect(products[0].name).equal("Special Full Coverage");
       expect(products[0].sellIn).equal(dias - 1);
@@ -176,7 +179,7 @@ describe("Test de Producto 'Special Full Coverage'", function() {
   });
 
   it("Si la fecha de venta expiró, cada día disminuye en uno los días de venta pero el precio queda en 0.", function() {
-    const coTest = new CarInsurance([ new Product("Special Full Coverage", 0, 20) ]);
+    const coTest = new CarInsurance([ new SpecialFullCoverage ( 0, 20) ]);
     const products = coTest.updatePrice();
     expect(products[0].name).equal("Special Full Coverage");
     expect(products[0].sellIn).equal(-1);
@@ -184,7 +187,7 @@ describe("Test de Producto 'Special Full Coverage'", function() {
   });
 
   it("El precio de venta no puede ser mayor a 50 si queda más de un día para que expire la venta", function() {
-    const coTest = new CarInsurance([ new Product("Special Full Coverage", 1, 50) ]);
+    const coTest = new CarInsurance([ new SpecialFullCoverage ( 1, 50) ]);
     const products = coTest.updatePrice();
     expect(products[0].name).equal("Special Full Coverage");
     expect(products[0].sellIn).equal(0);
@@ -192,7 +195,7 @@ describe("Test de Producto 'Special Full Coverage'", function() {
   });
 
   it("El precio de venta no puede superar los 50 aún cuando queden entre 1 a 5 días de venta", function() {
-    const coTest = new CarInsurance([ new Product("Special Full Coverage", 1, 49) ]);
+    const coTest = new CarInsurance([ new SpecialFullCoverage ( 1, 49) ]);
     const products = coTest.updatePrice();
     expect(products[0].name).equal("Special Full Coverage");
     expect(products[0].sellIn).equal(0);
