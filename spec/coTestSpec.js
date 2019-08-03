@@ -67,6 +67,33 @@ describe("Test de Producto normales", function() {
 
 });
 
+describe("Test de Producto 'Super Sale'", function() {
+
+  it("Si la fecha de venta no ha expirado, cada día disminuye en uno los días de venta y en dos el precio.", function() {
+    const coTest = new CarInsurance([ new Product("Super Sale", 10, 20) ]);
+    const products = coTest.updatePrice();
+    expect(products[0].name).equal("Super Sale");
+    expect(products[0].sellIn).equal(9);
+    expect(products[0].price).equal(18);
+  });
+
+  it("Si la fecha de venta expiró, cada día disminuye en uno los días de venta y el precio disminuye en cuatro.", function() {
+    const coTest = new CarInsurance([ new Product("Super Sale", 0, 20) ]);
+    const products = coTest.updatePrice();
+    expect(products[0].name).equal("Super Sale");
+    expect(products[0].sellIn).equal(-1);
+    expect(products[0].price).equal(16);
+  });
+
+  it("El precio de venta no puede ser negativo", function() {
+    const coTest = new CarInsurance([ new Product("Super Sale", 0, 0) ]);
+    const products = coTest.updatePrice();
+    expect(products[0].name).equal("Super Sale");
+    expect(products[0].sellIn).equal(-1);
+    expect(products[0].price).equal(0);
+  });
+
+});
 
 describe("Test de Producto 'Full Coverage'", function() {
 
